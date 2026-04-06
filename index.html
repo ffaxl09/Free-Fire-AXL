@@ -1,437 +1,180 @@
  <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 FREE FIRE MOBILE PANEL - Working</title>
+    <title>Live Fun Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        @keyframes gradientBG {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .stat-card {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: all 0.3s;
-        }
-        .stat-card:active {
-            transform: scale(0.95);
-        }
-        .stat-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        .toggle-btn {
-            width: 60px;
-            height: 30px;
-            border-radius: 25px;
-            border: none;
-            background: rgba(255,255,255,0.3);
-            position: relative;
-            cursor: pointer;
-            margin: 10px auto;
-            transition: all 0.3s;
-        }
-        .toggle-btn.active {
-            background: #00ff88;
-            box-shadow: 0 0 20px #00ff88;
-        }
-        .toggle-slider {
-            width: 26px;
-            height: 26px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-        .toggle-btn.active .toggle-slider {
-            transform: translateX(30px);
-        }
-        .status {
-            font-size: 11px;
-            text-align: center;
-            margin-top: 5px;
-        }
-        .status.on { color: #00ff88; }
-        .status.off { color: #ff4444; }
-        .section {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .section h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
+            background-color: #fcfcfc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .slider-container {
-            margin: 15px 0;
-        }
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255,255,255,0.3);
-            outline: none;
-            -webkit-appearance: none;
-        }
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #00ff88;
-            cursor: pointer;
-            box-shadow: 0 0 10px #00ff88;
-        }
-        .slider-value {
-            text-align: center;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-        }
-        .btn-success {
-            background: linear-gradient(45deg, #00ff88, #88ffaa);
-            color: black;
-        }
-        .btn-danger {
-            background: linear-gradient(45deg, #ff4444, #ff8888);
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .console {
-            background: rgba(0,0,0,0.4);
-            border-radius: 10px;
-            padding: 15px;
-            height: 150px;
-            overflow-y: auto;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-        .log-entry {
-            margin-bottom: 5px;
-            padding: 3px 0;
-        }
-        .log-time {
-            color: #aaa;
-            font-size: 10px;
-        }
-        #map {
-            width: 100%;
-            height: 120px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 14px;
-            margin: 10px 0;
+            height: 100vh;
         }
-        .players-list {
-            max-height: 100px;
-            overflow-y: auto;
+
+        .mobile-screen {
+            width: 360px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding-bottom: 20px;
         }
-        .player {
-            background: rgba(255,255,255,0.1);
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 8px;
-            font-size: 12px;
+
+        /* Top Bar */
+        .market-summary {
+            display: flex;
+            padding: 15px;
+            gap: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .index-box { font-size: 12px; color: #444; }
+        .index-val { font-weight: bold; color: #000; margin: 4px 0; }
+        .red-text { color: #eb5b3c; font-size: 11px; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 500;
+            color: #777;
+        }
+        .active-tab { color: #5367ff; border-bottom: 2px solid #5367ff; padding-bottom: 10px; }
+
+        /* Returns Content */
+        .content { padding: 20px; }
+        .returns-label { color: #888; font-size: 13px; margin-bottom: 8px; }
+        
+        #profit-val {
+            font-size: 28px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .positive { color: #00d09c; }
+        .negative { color: #eb5b3c; }
+
+        /* Instrument Row */
+        .instrument-card {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #f8f8f8;
+        }
+        .inst-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            font-size: 14px;
+            color: #444;
+        }
+        .inst-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        #safe-exit {
+            float: right;
+            color: #5367ff;
+            font-size: 12px;
+            border: 1px solid #eee;
+            padding: 4px 8px;
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔥 FREE FIRE PANEL</h1>
-            <p>Mobile Working Version</p>
-        </div>
 
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-icon" style="color: #ffd700;">💎</span>
-                <div class="stat-value" id="diamonds">25,450</div>
-                <div class="stat-label">Diamonds</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-icon" style="color: #ffaa00;">🪙</span>
-                <div class="stat-value" id="coins">124,500</div>
-                <div class="stat-label">Coins</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-icon" style="color: #ff4444;">🎯</span>
-                <div class="stat-value" id="headshots">1,247</div>
-                <div class="stat-label">Headshots</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-icon" style="color: #00aaff;">📍</span>
-                <div class="stat-value" id="players">7</div>
-                <div class="stat-label">Players</div>
-            </div>
+<div class="mobile-screen">
+    <div class="market-summary">
+        <div class="index-box">
+            <div>SENSEX</div>
+            <div class="index-val" id="top-sensex">72,839.48</div>
+            <div class="red-text">-743.74 (1.01%)</div>
         </div>
-
-        <!-- Auto Headshot -->
-        <div class="section">
-            <h3>🎯 Auto Headshot</h3>
-            <div class="toggle-btn" id="hsToggle" onclick="toggleHS()">
-                <div class="toggle-slider"></div>
-            </div>
-            <div class="status off" id="hsStatus">OFF</div>
-            
-            <div class="slider-container">
-                <label>Headshot %</label>
-                <input type="range" class="slider" id="hsPercent" min="50" max="100" value="95" oninput="updateHSVal()">
-                <div class="slider-value" id="hsVal">95%</div>
-            </div>
-            
-            <button class="btn btn-primary" onclick="applyHS()">Apply Config</button>
-        </div>
-
-        <!-- GPS Tracker -->
-        <div class="section">
-            <h3>📍 GPS Tracker</h3>
-            <div class="toggle-btn" id="gpsToggle" onclick="toggleGPS()">
-                <div class="toggle-slider"></div>
-            </div>
-            <div class="status off" id="gpsStatus">OFF</div>
-            
-            <div id="map">
-                <span style="font-size: 24px; margin-bottom: 5px;">🗺️</span>
-                <div>Bermuda Map</div>
-                <div id="distance">1.2 km</div>
-            </div>
-            
-            <input type="text" id="targetId" placeholder="Target Player ID" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid rgba(255,255,255,0.5); background:rgba(0,0,0,0.3); color:white;">
-            <button class="btn btn-primary" onclick="trackPlayer()">Track Player</button>
-        </div>
-
-        <!-- God Mode -->
-        <div class="section">
-            <h3>⚡ God Mode</h3>
-            <button class="btn btn-success" onclick="godMode()">Activate All Hacks</button>
-            <div class="players-list" id="playersList">
-                <div class="player">
-                    <span>ProPlayer123</span>
-                    <span>0.8 km ➡️</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Console -->
-        <div class="section">
-            <h3>📱 Console</h3>
-            <div class="console" id="console">
-                <div class="log-entry">
-                    <div class="log-time">[12:30]</div>
-                    Panel Loaded Successfully! ✅
-                </div>
-            </div>
-            <button class="btn btn-danger" onclick="clearConsole()" style="font-size:14px; padding:10px;">Clear</button>
+        <div class="index-box">
+            <div>NIFTY 50</div>
+            <div class="index-val" id="top-nifty">22,624.65</div>
+            <div class="red-text">-194.95 (0.85%)</div>
         </div>
     </div>
 
-    <script>
-        let diamonds = 25450;
-        let coins = 124500;
-        let headshots = 1247;
-        let playersNearby = 7;
-        let autoHS = false;
-        let gpsActive = false;
+    <div class="tabs">
+        <span>Explore</span>
+        <span class="active-tab">Positions</span>
+        <span>Orders</span>
+    </div>
 
-        function updateDisplay() {
-            document.getElementById('diamonds').textContent = diamonds.toLocaleString();
-            document.getElementById('coins').textContent = coins.toLocaleString();
-            document.getElementById('headshots').textContent = headshots.toLocaleString();
-            document.getElementById('players').textContent = playersNearby;
-        }
+    <div class="content">
+        <span id="safe-exit">Set Safe Exit 🛡️</span>
+        <div class="returns-label">Total Returns</div>
+        <div id="profit-val" class="positive">+₹485.00</div>
 
-        function toggleHS() {
-            autoHS = !autoHS;
-            const toggle = document.getElementById('hsToggle');
-            const status = document.getElementById('hsStatus');
-            
-            toggle.classList.toggle('active');
-            if (autoHS) {
-                status.textContent = 'ON';
-                status.classList.remove('off');
-                status.classList.add('on');
-                headshots += 15;
-                addLog('🎯 Auto Headshot ON - +15 HS');
-            } else {
-                status.textContent = 'OFF';
-                status.classList.remove('on');
-                status.classList.add('off');
-                addLog('🎯 Auto Headshot OFF');
-            }
-            updateDisplay();
-        }
+        <div class="instrument-card">
+            <div class="inst-header">
+                <div>SENSEX <span id="current-date"></span> 72500 Put</div>
+                <div style="color: #5367ff;">-20 ></div>
+            </div>
+            <div class="inst-footer">
+                <div>Avg ₹814.95</div>
+                <div id="mkt-val">Mkt ₹790.70</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        function toggleGPS() {
-            gpsActive = !gpsActive;
-            const toggle = document.getElementById('gpsToggle');
-            const status = document.getElementById('gpsStatus');
-            
-            toggle.classList.toggle('active');
-            if (gpsActive) {
-                status.textContent = 'ON';
-                status.classList.remove('off');
-                status.classList.add('on');
-                playersNearby = Math.floor(Math.random() * 10) + 3;
-                document.getElementById('distance').textContent = (Math.random() * 2 + 0.5).toFixed(1) + ' km';
-                addLog('📍 GPS Tracker ON - ' + playersNearby + ' players');
-            } else {
-                status.textContent = 'OFF';
-                status.classList.remove('on');
-                status.classList.add('off');
-                addLog('📍 GPS Tracker OFF');
-            }
-            updateDisplay();
-        }
+<script>
+    let profit = 485.00;
+    let sensex = 72839.48;
+    let mktPrice = 790.70;
 
-        function updateHSVal() {
-            const val = document.getElementById('hsPercent').value;
-            document.getElementById('hsVal').textContent = val + '%';
-        }
+    // Date Auto-set
+    function setDate() {
+        const d = new Date();
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        document.getElementById('current-date').innerText = ("0" + d.getDate()).slice(-2) + " " + months[d.getMonth()];
+    }
 
-        function applyHS() {
-            const percent = document.getElementById('hsPercent').value;
-            headshots += 25;
-            addLog('🔧 HS Config Applied: ' + percent + '%');
-            updateDisplay();
-        }
-
-        function trackPlayer() {
-            const id = document.getElementById('targetId').value;
-            if (id) {
-                playersNearby++;
-                const dist = (Math.random() * 1.5).toFixed(1);
-                addLog('🔍 Tracked ' + id + ' - ' + dist + 'km');
-                document.getElementById('distance').textContent = dist + ' km';
-                updateDisplay();
-            } else {
-                alert('Player ID enter karo!');
-            }
-        }
-
-        function godMode() {
-            diamonds += 5000;
-            coins += 50000;
-            headshots += 50;
-            playersNearby = 0;
-            addLog('⚡ GOD MODE ACTIVATED! All Hacks ON 🚀');
-            updateDisplay();
-        }
-
-        function addLog(message) {
-            const consoleDiv = document.getElementById('console');
-            const time = new Date().toLocaleTimeString('hi-IN');
-            const log = document.createElement('div');
-            log.className = 'log-entry';
-            log.innerHTML = `
-                <div class="log-time">[` + time + `]</div>
-                ${message}
-            `;
-            consoleDiv.insertBefore(log, consoleDiv.firstChild);
-            
-            // Max 8 logs
-            while (consoleDiv.children.length > 8) {
-                consoleDiv.removeChild(consoleDiv.lastChild);
-            }
-        }
-
-        function clearConsole() {
-            document.getElementById('console').innerHTML = '';
-        }
-
-        // Auto updates
+    // Numbers Update logic
+    function liveUpdate() {
         setInterval(() => {
-            if (autoHS) {
-                headshots += Math.floor(Math.random() * 3) + 1;
-                updateDisplay();
-            }
-            if (gpsActive) {
-                document.getElementById('distance').textContent = (Math.random() * 2 + 0.5).toFixed(1) + ' km';
-            }
-        }, 5000);
+            // Profit change (-15 se +15 range)
+            let change = (Math.random() * 30 - 15);
+            profit += change;
 
-        // Initialize
-        updateDisplay();
-        addLog('✅ Panel Fully Working - Mobile Optimized!');
-    </script>
+            const pElement = document.getElementById('profit-val');
+            let formatted = Math.abs(profit).toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            if (profit >= 0) {
+                pElement.innerText = "+₹" + formatted;
+                pElement.className = "positive";
+            } else {
+                pElement.innerText = "-₹" + formatted;
+                pElement.className = "negative";
+            }
+
+            // Market Price and Sensex movement
+            mktPrice += (Math.random() * 2 - 1);
+            sensex += (Math.random() * 10 - 5);
+
+            document.getElementById('mkt-val').innerText = "Mkt ₹" + mktPrice.toFixed(2);
+            document.getElementById('top-sensex').innerText = sensex.toLocaleString('en-IN', {minimumFractionDigits: 2});
+
+        }, 1000); // 1 second update
+    }
+
+    setDate();
+    liveUpdate();
+</script>
+
 </body>
 </html>
