@@ -1,1 +1,213 @@
 
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Max Tracker</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        :root {
+            --accent: #00f2fe;
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Styling */
+        .dashboard {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-box {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .label { font-size: 12px; color: #94a3b8; text-transform: uppercase; }
+        .value { font-size: 20px; font-weight: bold; color: var(--accent); margin-top: 5px; }
+
+        #map {
+            height: 40vh;
+            width: 100%;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-start { background: #22c55e; color: white; }
+        .btn-share { background: #25d366; color: white; }
+        .btn-stop { background: #ef4444; color: white; display: none; }
+
+        #address-text {
+            text-align: center;
+            font-size: 13px;
+            padding: 10px 20px;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <div id="address-text">Location access ka intezar hai...</div>
+
+    <div class="dashboard">
+        <div class="stat-box">
+            <div class="label">Speed</div>
+            <div class="value" id="speed">0.0 km/h</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Distance</div>
+            <div class="value" id="dist">0.00 km</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Altitude</div>
+            <div class="value" id="alt">-- m</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Accuracy</div>
+            <div class="value" id="acc">--</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-start" id="startBtn" onclick="toggleTracking()">Start Track</button>
+        <button class="btn btn-stop" id="stopBtn" onclick="toggleTracking()">Stop</button>
+        <button class="btn btn-share" onclick="shareLoc()">Share on WhatsApp</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        let map, marker, pathLine, watchId;
+        let coordsHistory = [];
+        let totalDistance = 0;
+        let lastLat, lastLng;
+
+        // Initialize Map
+        map = L.map('map').setView([20.5937, 78.9629], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        pathLine = L.polyline([], {color: '#00f2fe', weight: 5}).addTo(map);
+
+        function toggleTracking() {
+            if (!watchId) {
+                startTracking();
+            } else {
+                stopTracking();
+            }
+        }
+
+        function startTracking() {
+            if (!navigator.geolocation) return alert("Not supported!");
+
+            watchId = navigator.geolocation.watchPosition(updatePos, showError, {
+                enableHighAccuracy: true,
+                maximumAge: 0
+            });
+
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'block';
+        }
+
+        function updatePos(pos) {
+            const { latitude, longitude, speed, accuracy, altitude } = pos.coords;
+            const currentPos = [latitude, longitude];
+
+            // Update UI Stats
+            document.getElementById('speed').innerText = speed ? (speed * 3.6).toFixed(1) + " km/h" : "0.0 km/h";
+            document.getElementById('acc').innerText = accuracy.toFixed(0) + "m";
+            document.getElementById('alt').innerText = altitude ? altitude.toFixed(0) + "m" : "--";
+
+            // Distance Calculation (Haversine)
+            if (lastLat && lastLng) {
+                const d = calcDist(lastLat, lastLng, latitude, longitude);
+                totalDistance += d;
+                document.getElementById('dist').innerText = totalDistance.toFixed(2) + " km";
+            }
+
+            // Map Update
+            if (!marker) {
+                marker = L.marker(currentPos).addTo(map);
+                map.setView(currentPos, 18);
+            } else {
+                marker.setLatLng(currentPos);
+                map.panTo(currentPos);
+            }
+
+            // Draw Path
+            coordsHistory.push(currentPos);
+            pathLine.setLatLngs(coordsHistory);
+
+            lastLat = latitude;
+            lastLng = longitude;
+
+            // Get Address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                .then(r => r.json()).then(data => {
+                    document.getElementById('address-text').innerText = data.display_name;
+                });
+        }
+
+        function calcDist(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2-lat1) * Math.PI / 180;
+            const dLon = (lon2-lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function shareLoc() {
+            if(!lastLat) return alert("Pehle tracking shuru karein!");
+            const url = `https://www.google.com/maps?q=${lastLat},${lastLng}`;
+            window.open(`https://wa.me/?text=Meri Live Location yahan dekhein: ${url}`);
+        }
+
+        function stopTracking() {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('stopBtn').style.display = 'none';
+        }
+
+        function showError(err) { alert("Error: " + err.message); }
+    </script>
+</body>
+</html>
